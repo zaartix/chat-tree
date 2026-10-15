@@ -11,6 +11,8 @@ from pathlib import Path
 
 from store import codex_link
 
+OPENING_SECONDS = 540
+
 
 class CodexHistory:
     name = 'codex'
@@ -197,6 +199,8 @@ class CodexHistory:
                 raise RuntimeError('Parent settings changed during creation; inspect the recorded child UUID')
             return {'chat_id': created['id'], 'turn_id': None}
 
+    # The opening turn writes the item plan. It runs in this app-server process, so creation waits for it: Desktop must not
+    # open the chat while another process is still writing to it. Keep it below the tool timeout in `.mcp.json`.
     def open(self, chat_id, text, instructions):
         """Run one opening turn in a new chat that Desktop has not opened yet; Desktop shows only turns.
 
@@ -211,7 +215,7 @@ class CodexHistory:
                 turn_id = call(4, 'turn/start', {'threadId': chat_id, 'input': [{'type': 'text', 'text': text}]})['turn']['id']
             except RuntimeError:
                 return None
-            deadline = time.monotonic() + 90
+            deadline = time.monotonic() + OPENING_SECONDS
             try:
                 while True:
                     event = self._next_event(messages, deadline, 'opening turn')

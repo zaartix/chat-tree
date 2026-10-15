@@ -11,9 +11,10 @@ from store import Store, TreeError, data_path, host_name, LANGUAGE_INSTRUCTION
 EVENT = {}
 SYNC = {'codex': 'archive -> set_thread_archived archived=true, unarchive -> archived=false',
         'claude': 'archive -> archive_session, unarchive -> unarchive_session'}
-OPENING = ('Chat Tree created this chat for the item below; this first message is its card, not a request to work. '
-           'Call tree_panel once and show its outline, then reply with one short line saying the chat is ready for this item. '
-           'Do not start the task, read files or change the tree. ')
+OPENING = ('Chat Tree created this chat for the item below; this first message is its card. Answer it with a plan, not with the work. '
+           'Call tree_panel once and show its outline. Then briefly restate what the inherited context and parent results mean for '
+           'this item and propose a step-by-step implementation plan with open questions. Read project files only as far as the plan '
+           'needs. Do not change files, run builds or change the tree; end by asking whether to proceed. ')
 
 
 def chat_store(event):

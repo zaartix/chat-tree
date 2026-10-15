@@ -15,11 +15,13 @@ VERSION = json.loads((ROOT / '.codex-plugin' / 'plugin.json').read_text())['vers
 # A new URI per release makes hosts load the released panel.
 UI_URI = 'ui://chat-tree/v' + VERSION + '/tree.html'
 RECONCILE_SECONDS = 10
-OPENING = ('Chat Tree opened this item chat. The next user message is the card of this item, not a request to work. '
-           'Call tree_panel once so the user sees this item and its parent, then reply with one short line in the language '
-           'of the item saying the chat is ready for this item. Do not start the task, read files or change the tree.')
+OPENING = ('Chat Tree opened this item chat. The next user message is the card of this item; answer it with a plan, not with the work. '
+           'Call tree_panel once so the user sees this item and its parent. Then, in the language of the item, briefly restate what '
+           'the inherited context and parent results mean for this item and propose a step-by-step implementation plan with open '
+           'questions. Read project files only as far as the plan needs. Do not change files, run builds or change the tree; '
+           'end by asking whether to proceed.')
 CLAUDE_BACKGROUND = ('This session is a Chat Tree item chat. Chat Tree adds the task context of the item to every message here. '
-                     'Present the item and wait for the user; do not start the task on your own.')
+                     'Propose a plan for the item and wait for the user; do not start the work on your own.')
 
 
 def default_host():
@@ -67,7 +69,7 @@ CODEX_TOOLS = [
                {'change': CHANGE, 'expected_revision': {'type': 'integer'}}, ['change'], readonly=False),
     definition('tree_ui', 'User action', 'A direct user action in the panel. Not available to the model.', {'change': CHANGE, 'proposal_id': STRING, 'dismiss_proposal': STRING, 'expected_revision': {'type': 'integer'}, **JOB, 'step': {'type':'string','enum':['cancel']}}, readonly=False, app_only=True),
     definition('tree_job', 'Branch operation', 'Read an approved operation and retrieve its exact summary/delivery service prompt: summary needs the node_id of the item, delivery goes to the immediate parent of the selected item. Do not create another chat when the operation is creating or has a chat_id.', {**JOB, 'node_id': STRING, 'purpose': {'type': 'string', 'enum': ['summary', 'delivery']}}, ['operation_id', 'token']),
-    definition('tree_create_saved_chat', 'Create an item chat', 'Create exactly one approved chat by forking the immediate parent settings without its work history. The server verifies inheritance and binds the chat; no model turn runs, and the branch context reaches the chat with its first message. Available to the start/rebuild initiator. Open the parent chat first. Then open the saved chat in Desktop. Do not retry creation after an error: the UUID is saved immediately.', {**JOB, 'node_id': STRING}, ['operation_id','token','node_id'], readonly=False),
+    definition('tree_create_saved_chat', 'Create an item chat', 'Create exactly one approved chat by forking the immediate parent settings without its work history. The server verifies inheritance and binds the chat; its opening turn answers the item card with a plan for the item, and the branch context reaches the chat with every message. Creation waits for that plan, up to several minutes. Available to the start/rebuild initiator. Open the parent chat first. Then open the saved chat in Desktop. Do not retry creation after an error: the UUID is saved immediately.', {**JOB, 'node_id': STRING}, ['operation_id','token','node_id'], readonly=False),
     definition('tree_summary', 'Save a fresh summary', 'Save one summary paragraph for the current chat during approved collection. Save immediate child summaries first. Preserve the chat working language. Does not complete other branches.', {**JOB, 'summary': STRING}, ['operation_id', 'token', 'summary'], readonly=False),
     definition('tree_step', 'Continue operation', 'Advance an approved operation from the initiating chat: claim,prepare_replacement,ready_to_delete,delivered,commit,cancel,error. Follow the chat-tree skill; commit validates completion.', {**JOB, 'step': {'type': 'string', 'enum': ['claim','prepare_replacement','ready_to_delete','delivered','commit','cancel','error']}, 'data': {'type': 'object'}}, ['operation_id','token','step'], readonly=False),
     definition('tree_delete_saved_chat', 'Delete an archived chat', 'Permanently delete one chat from an approved delete/rebuild operation after native archive, using public thread/delete. Requires protective hooks and verifies the branch reservation. Do not bypass an active writer refusal.', {**JOB, 'node_id': STRING}, ['operation_id','token','node_id'], readonly=False),
@@ -194,8 +196,8 @@ class Dispatcher:
                     trusted = False
                 if trusted:
                     self.store.fresh_chat(created['chat_id'])
-                # Desktop shows only turns, so once the chat is bound one short opening turn presents the item:
-                # its card is the user message and the agent answers with the panel of this item.
+                # Desktop shows only turns, so once the chat is bound an opening turn presents the item:
+                # its card is the user message and the agent answers with the panel of this item and a plan for it.
                 card = '\n\n'.join(part for part in (title, node['description']) if part)
                 try:
                     created['turn_id'] = self.history.open(created['chat_id'], card, OPENING)
