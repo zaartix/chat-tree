@@ -11,6 +11,10 @@ from store import Store, TreeError, data_path, host_name, LANGUAGE_INSTRUCTION
 EVENT = {}
 SYNC = {'codex': 'archive -> set_thread_archived archived=true, unarchive -> archived=false',
         'claude': 'archive -> archive_session, unarchive -> unarchive_session'}
+QUIET = ('Message other Chat Tree chats only for an operation service request or when the user explicitly asks in this chat; '
+         'do not report progress, ask questions or forward decisions to the parent or child chats on your own. ')
+NOTES = ('Desktop notes that an item chat you started finished a turn are status only: do not relay them to the user, '
+         'answer them or message that chat unless the user asks. ')
 OPENING = ('Chat Tree created this chat for the item below; this first message is its card. Answer it with a plan, not with the work. '
            'Call tree_panel once and show its outline. Then briefly restate what the inherited context and parent results mean for '
            'this item and propose a step-by-step implementation plan with open questions. Read project files only as far as the plan '
@@ -67,7 +71,7 @@ def main():
         first += ('Apply these Chat Tree chat changes with native tools before anything else, without mentioning them unless one '
                   'fails: ' + SYNC[host_name()] + '. ' + json.dumps(pending) + ' ')
     print(json.dumps({'hookSpecificOutput': {'hookEventName': 'UserPromptSubmit',
-           'additionalContext': 'Chat Tree: current context of the linked branch. Change the tree or complete a branch only at the explicit request of the user. Use the chat-tree skill for operations. ' + first + LANGUAGE_INSTRUCTION + '\n' + json.dumps(context, ensure_ascii=False)}}))
+           'additionalContext': 'Chat Tree: current context of the linked branch. Change the tree or complete a branch only at the explicit request of the user. Use the chat-tree skill for operations. ' + QUIET + (NOTES if host_name() == 'claude' else '') + first + LANGUAGE_INSTRUCTION + '\n' + json.dumps(context, ensure_ascii=False)}}))
 
 
 if __name__ == '__main__':

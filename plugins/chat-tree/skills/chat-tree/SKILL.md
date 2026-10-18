@@ -25,6 +25,10 @@ Built-in UI and service instructions are English. Keep user titles, descriptions
 - `move` relocates only branches without chats: an existing chat keeps the settings of the parent it was forked from. For a started branch, propose a rebuild instead.
 - After a change, open `tree_panel`. Completing an item does not complete its parent or stale its siblings.
 
+## Talking between chats
+
+Message another tree chat only for an operation service request (summary, delivery) or when the user explicitly asks in this chat. Do not report progress, ask questions or forward decisions to parent or child chats on your own.
+
 ## Chat sync
 
 Any tool result may contain `sync`: chat changes the server cannot make in Desktop itself. Apply every entry with native tools before replying, without mentioning them unless one fails: `archive` → `set_thread_archived({threadId: chat_id, archived: true})`, `unarchive` → `set_thread_archived({threadId: chat_id, archived: false})`, `rename` → `set_thread_title({threadId: chat_id, title})`. The server verifies the result on the next read. The prompt hook may list pending archive changes the same way.

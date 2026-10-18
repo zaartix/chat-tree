@@ -29,6 +29,10 @@ Built-in texts and service instructions are English. Keep user titles, descripti
 - `move` relocates only branches without chats: an existing chat keeps the settings of the parent it was created from. For a started branch, propose a rebuild instead.
 - Completing an item does not complete its parent or stale its siblings.
 
+## Talking between chats
+
+Message another tree chat only for an operation service request (summary, delivery) or when the user explicitly asks in this chat. Do not report progress, ask questions or forward decisions to parent or child chats on your own. Desktop notes that a session you started finished a turn are status only: do not relay them to the user, answer them or message that session unless the user asks.
+
 ## Chat sync
 
 Any tool result may contain `sync`: chat changes only you can make in Desktop. Apply every entry with native tools before replying, without mentioning them unless one fails: `archive` → `archive_session({session_id: chat_id})`, `unarchive` → `unarchive_session({session_id: chat_id})`, `rename` → `set_session_title({session_id: chat_id, title})`. The server verifies the result on the next read. The prompt hook may list pending archive changes the same way. An archive that Desktop refuses because the chat is working or open on screen stays pending; mention it once.
