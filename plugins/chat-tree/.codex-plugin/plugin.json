@@ -16,7 +16,7 @@
     "composerIcon": "./assets/icon.svg",
     "logo": "./assets/icon.svg",
     "developerName": "zaartix",
-    "websiteUrl": "https://github.com/zaartix/codex-chat-tree",
+    "websiteUrl": "https://github.com/zaartix/chat-tree",
     "longDescription": "Turn an agreed plan into a nested checklist where every item is its own Codex chat. Item chats inherit the settings of their immediate parent, and completing a branch collects summaries bottom-up and hands the result to its parent."
   },
   "name": "chat-tree",

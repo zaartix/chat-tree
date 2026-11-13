@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Install or update Chat Tree for Claude Code (Claude Desktop, Code tab).
 
-From GitHub:   curl -fsSL https://raw.githubusercontent.com/zaartix/codex-chat-tree/main/install_claude.py | python3 -
+From GitHub:   curl -fsSL https://raw.githubusercontent.com/zaartix/chat-tree/main/install_claude.py | python3 -
 From a clone:  python3 install_claude.py              (installs the working copy, for development)
 Remove:        python3 install_claude.py --uninstall  (saved trees are kept)
 
@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPO = 'zaartix/codex-chat-tree'
+REPO = 'zaartix/chat-tree'
 MARKETPLACE = 'chat-tree'
 PLUGIN = 'chat-tree@' + MARKETPLACE
 

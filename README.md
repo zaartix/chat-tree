@@ -24,26 +24,26 @@ Both hosts need Python 3.9+ available as `python3` (standard library only). Each
 Requires Codex Desktop.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/zaartix/codex-chat-tree/main/install.py | python3 -
+curl -fsSL https://raw.githubusercontent.com/zaartix/chat-tree/main/install.py | python3 -
 ```
 
 The installer adds the plugin through the Codex plugin manager, asks once whether to trust its four hooks, and tells you to restart Codex. Run the same command again to update. To remove the plugin (saved trees are kept):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/zaartix/codex-chat-tree/main/install.py | python3 - --uninstall
+curl -fsSL https://raw.githubusercontent.com/zaartix/chat-tree/main/install.py | python3 - --uninstall
 ```
 
-Without the installer: `codex plugin marketplace add zaartix/codex-chat-tree`, `codex plugin add chat-tree@chat-tree`, then trust the hooks in Codex settings.
+Without the installer: `codex plugin marketplace add zaartix/chat-tree`, `codex plugin add chat-tree@chat-tree`, then trust the hooks in Codex settings.
 
 ### Claude Code
 
 Requires the Code tab of Claude Desktop: item chats are Desktop sessions. In a terminal-only Claude Code the tree can be read, but item chats cannot be created.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/zaartix/codex-chat-tree/main/install_claude.py | python3 -
+curl -fsSL https://raw.githubusercontent.com/zaartix/chat-tree/main/install_claude.py | python3 -
 ```
 
-The installer adds the plugin through the Claude Code plugin manager; new sessions load it. Run the same command again to update, or add `--uninstall` to remove it (saved trees are kept). Without the installer: `claude plugin marketplace add zaartix/codex-chat-tree`, then `claude plugin install chat-tree@chat-tree`.
+The installer adds the plugin through the Claude Code plugin manager; new sessions load it. Run the same command again to update, or add `--uninstall` to remove it (saved trees are kept). Without the installer: `claude plugin marketplace add zaartix/chat-tree`, then `claude plugin install chat-tree@chat-tree`.
 
 ## Use
 
@@ -83,7 +83,7 @@ Remote environments have not been verified.
 ## Development
 
 ```sh
-git clone https://github.com/zaartix/codex-chat-tree && cd codex-chat-tree
+git clone https://github.com/zaartix/chat-tree && cd chat-tree
 python3 -m unittest discover -s tests   # tests
 python3 preview.py                      # panel preview with isolated data
 python3 install.py                      # install this checkout into Codex, then restart Codex

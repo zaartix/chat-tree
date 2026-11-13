@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Install or update Chat Tree for Codex.
 
-From GitHub:   curl -fsSL https://raw.githubusercontent.com/zaartix/codex-chat-tree/main/install.py | python3 -
+From GitHub:   curl -fsSL https://raw.githubusercontent.com/zaartix/chat-tree/main/install.py | python3 -
 From a clone:  python3 install.py              (installs the working copy, for development)
 Remove:        python3 install.py --uninstall  (saved trees are kept)
 
@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPO = 'zaartix/codex-chat-tree'
+REPO = 'zaartix/chat-tree'
 MARKETPLACE = 'chat-tree'
 PLUGIN = 'chat-tree@' + MARKETPLACE
 CODEX_CANDIDATES = ('/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex',
